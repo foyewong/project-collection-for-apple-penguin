@@ -301,6 +301,7 @@
       position: relative;
       min-height: 620px;
       perspective: 1400px;
+      touch-action: pan-y;
     }
 
     .stage-orbit {
@@ -1431,25 +1432,68 @@
     }
 
     function setupPointerInteraction() {
-      window.addEventListener("pointermove", (event) => {
+      const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
+
+      function setCursorPosition(x, y) {
         document.body.classList.add("is-pointing");
-        document.documentElement.style.setProperty("--mouse-x", `${event.clientX}px`);
-        document.documentElement.style.setProperty("--mouse-y", `${event.clientY}px`);
+        document.documentElement.style.setProperty("--mouse-x", `${x}px`);
+        document.documentElement.style.setProperty("--mouse-y", `${y}px`);
+      }
+
+      function setStageFromPoint(x, y) {
+        const rect = heroStage.getBoundingClientRect();
+        const stageX = ((x - rect.left) / rect.width - 0.5) * 2;
+        const stageY = ((y - rect.top) / rect.height - 0.5) * 2;
+        constellation.style.setProperty("--stage-x", Math.max(-1, Math.min(1, stageX)).toFixed(3));
+        constellation.style.setProperty("--stage-y", Math.max(-1, Math.min(1, stageY)).toFixed(3));
+      }
+
+      window.addEventListener("pointermove", (event) => {
+        setCursorPosition(event.clientX, event.clientY);
       });
       window.addEventListener("pointerleave", () => {
         document.body.classList.remove("is-pointing");
       });
       heroStage.addEventListener("pointermove", (event) => {
-        const rect = heroStage.getBoundingClientRect();
-        const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
-        const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
-        constellation.style.setProperty("--stage-x", x.toFixed(3));
-        constellation.style.setProperty("--stage-y", y.toFixed(3));
+        setStageFromPoint(event.clientX, event.clientY);
       });
       heroStage.addEventListener("pointerleave", () => {
         constellation.style.setProperty("--stage-x", "0");
         constellation.style.setProperty("--stage-y", "0");
       });
+
+      heroStage.addEventListener("touchstart", (event) => {
+        const touch = event.touches[0];
+        if (!touch) return;
+        setCursorPosition(touch.clientX, touch.clientY);
+        setStageFromPoint(touch.clientX, touch.clientY);
+      }, { passive: true });
+
+      heroStage.addEventListener("touchmove", (event) => {
+        const touch = event.touches[0];
+        if (!touch) return;
+        setCursorPosition(touch.clientX, touch.clientY);
+        setStageFromPoint(touch.clientX, touch.clientY);
+      }, { passive: true });
+
+      heroStage.addEventListener("touchend", () => {
+        document.body.classList.remove("is-pointing");
+      }, { passive: true });
+
+      if (isCoarsePointer && !reducedMotion) {
+        let activeTouch = false;
+        heroStage.addEventListener("touchstart", () => { activeTouch = true; }, { passive: true });
+        heroStage.addEventListener("touchend", () => { activeTouch = false; }, { passive: true });
+        const drift = () => {
+          if (!activeTouch) {
+            const t = performance.now() / 1600;
+            constellation.style.setProperty("--stage-x", (Math.sin(t) * 0.28).toFixed(3));
+            constellation.style.setProperty("--stage-y", (Math.cos(t * 0.8) * 0.22).toFixed(3));
+          }
+          requestAnimationFrame(drift);
+        };
+        drift();
+      }
     }
 
     function setupScrollInteraction() {
