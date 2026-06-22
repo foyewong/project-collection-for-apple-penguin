@@ -687,6 +687,8 @@
       opacity: 0;
       transition: opacity 500ms ease, transform 500ms ease, box-shadow 180ms ease;
       will-change: transform;
+      content-visibility: auto;
+      contain-intrinsic-size: 260px 220px;
     }
 
     .work-card.is-visible {
@@ -974,9 +976,9 @@
           </article>
         </div>
         <div class="sticky-preview" id="storyPreview" aria-hidden="true">
-          <img src="images/1.png" alt="">
-          <img src="images/8.png" alt="">
-          <img src="images/15.png" alt="">
+          <img src="images/1.png" alt="" loading="lazy" decoding="async" fetchpriority="low">
+          <img src="images/8.png" alt="" loading="lazy" decoding="async" fetchpriority="low">
+          <img src="images/15.png" alt="" loading="lazy" decoding="async" fetchpriority="low">
         </div>
       </div>
     </section>
@@ -1037,12 +1039,13 @@
 
   <script>
     const config = {
-      maxIndex: 260,
-      batchSize: 24,
-      scanBatchSize: 12,
-      stopAfterMissing: 36,
-      imageExts: ["png", "jpg", "jpeg", "webp", "gif"],
-      videoExts: ["mp4", "webm", "mov"]
+      fallbackImageCount: 107,
+      batchSize: 16,
+      fallbackFolder: "images",
+      fallbackExt: "png",
+      githubRepo: "foyewong/project-collection-for-apple-penguin",
+      githubBranch: "main",
+      mediaExts: ["png", "jpg", "jpeg", "webp", "gif", "mp4", "webm", "mov"]
     };
 
     const state = {
@@ -1070,65 +1073,58 @@
     const lightboxTitle = document.querySelector("#lightboxTitle");
     const storyPreview = document.querySelector("#storyPreview");
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const imageExts = new Set(config.imageExts);
-
-    function buildCandidates(folders, exts) {
-      const candidates = [];
-      folders.forEach((folder) => {
-        for (let index = 1; index <= config.maxIndex; index += 1) {
-          exts.forEach((ext) => {
-            candidates.push({
-              folder,
-              index,
-              ext,
-              type: config.videoExts.includes(ext) ? "video" : "image",
-              src: `${folder}/${index}.${ext}`
-            });
-          });
-        }
-      });
-      return candidates;
-    }
-
-    function testImage(candidate) {
-      return new Promise((resolve) => {
-        const image = new Image();
-        image.onload = () => resolve({
-          ...candidate,
-          width: image.naturalWidth,
-          height: image.naturalHeight,
-          ratio: image.naturalWidth / Math.max(image.naturalHeight, 1)
-        });
-        image.onerror = () => resolve(null);
-        image.src = candidate.src;
-      });
-    }
-
-    function testVideo(candidate) {
-      return new Promise((resolve) => {
-        const video = document.createElement("video");
-        let finished = false;
-        const done = (asset) => {
-          if (finished) return;
-          finished = true;
-          video.removeAttribute("src");
-          video.load();
-          resolve(asset);
+    function createFallbackAssets() {
+      return Array.from({ length: config.fallbackImageCount }, (_, index) => {
+        const number = index + 1;
+        return {
+          folder: config.fallbackFolder,
+          index: number,
+          ext: config.fallbackExt,
+          type: "image",
+          src: `${config.fallbackFolder}/${number}.${config.fallbackExt}`,
+          ratio: 4 / 3
         };
-        video.preload = "metadata";
-        video.onloadedmetadata = () => done({
-          ...candidate,
-          width: video.videoWidth || 16,
-          height: video.videoHeight || 9,
-          ratio: (video.videoWidth || 16) / Math.max(video.videoHeight || 9, 1)
-        });
-        video.onerror = () => done(null);
-        video.src = candidate.src;
       });
     }
 
-    function testCandidate(candidate) {
-      return imageExts.has(candidate.ext) ? testImage(candidate) : testVideo(candidate);
+    function isGithubPages() {
+      return location.hostname.endsWith("github.io");
+    }
+
+    function pathToAsset(path) {
+      const match = path.match(/^(.+)\/(\d+)\.([a-z0-9]+)$/i);
+      if (!match) return null;
+      const ext = match[3].toLowerCase();
+      if (!config.mediaExts.includes(ext)) return null;
+      return {
+        folder: match[1],
+        index: Number(match[2]),
+        ext,
+        type: ["mp4", "webm", "mov"].includes(ext) ? "video" : "image",
+        src: path,
+        ratio: 4 / 3
+      };
+    }
+
+    async function fetchGithubAssets() {
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), 5000);
+      const url = `https://api.github.com/repos/${config.githubRepo}/git/trees/${config.githubBranch}?recursive=1`;
+
+      try {
+        const response = await fetch(url, {
+          signal: controller.signal,
+          headers: { "Accept": "application/vnd.github+json" }
+        });
+        if (!response.ok) throw new Error(`GitHub API ${response.status}`);
+        const data = await response.json();
+        return (data.tree || [])
+          .filter((item) => item.type === "blob")
+          .map((item) => pathToAsset(item.path))
+          .filter(Boolean);
+      } finally {
+        window.clearTimeout(timeout);
+      }
     }
 
     function assetKey(asset) {
@@ -1165,120 +1161,6 @@
       scanPercent.textContent = `${rounded}%`;
     }
 
-    async function scanCandidates(candidates, options) {
-      const { phase, start = 0, end = 100, concurrency = 32 } = options;
-      let cursor = 0;
-      let completed = 0;
-      const found = [];
-      updateScanProgress(start, phase);
-
-      async function worker() {
-        while (cursor < candidates.length) {
-          const candidate = candidates[cursor];
-          cursor += 1;
-          const result = await testCandidate(candidate);
-          completed += 1;
-          if (result) found.push(result);
-          if (completed % 8 === 0 || completed === candidates.length) {
-            const progress = start + (completed / candidates.length) * (end - start);
-            updateScanProgress(progress, phase);
-          }
-        }
-      }
-
-      const workerCount = Math.min(concurrency, candidates.length);
-      await Promise.all(Array.from({ length: workerCount }, worker));
-      updateScanProgress(end, phase);
-      return found;
-    }
-
-    async function scanNumberedSequence(folder, ext, options) {
-      const {
-        phase,
-        start = 0,
-        end = 100,
-        batchSize = config.scanBatchSize,
-        stopAfterMissing = config.stopAfterMissing
-      } = options;
-      const found = [];
-      let consecutiveMissing = 0;
-      updateScanProgress(start, phase);
-
-      for (let first = 1; first <= config.maxIndex; first += batchSize) {
-        const last = Math.min(first + batchSize - 1, config.maxIndex);
-        const batch = [];
-        for (let index = first; index <= last; index += 1) {
-          batch.push({
-            folder,
-            index,
-            ext,
-            type: config.videoExts.includes(ext) ? "video" : "image",
-            src: `${folder}/${index}.${ext}`
-          });
-        }
-
-        const results = await Promise.all(batch.map(testCandidate));
-        results.forEach((result) => {
-          if (result) {
-            found.push(result);
-            consecutiveMissing = 0;
-          } else {
-            consecutiveMissing += 1;
-          }
-        });
-
-        const progress = start + (last / config.maxIndex) * (end - start);
-        updateScanProgress(progress, phase);
-
-        if (found.length && consecutiveMissing >= stopAfterMissing) break;
-        await new Promise((resolve) => setTimeout(resolve, 0));
-      }
-
-      updateScanProgress(end, phase);
-      return found;
-    }
-
-    async function scanPrimaryAssets() {
-      return scanNumberedSequence("images", "png", {
-        phase: "Fast scan",
-        start: 4,
-        end: 82,
-        batchSize: 14,
-        stopAfterMissing: 32
-      });
-    }
-
-    async function scanBackgroundAssets() {
-      const imageFallbacks = config.imageExts.filter((ext) => ext !== "png");
-      const candidates = [
-        ...buildCandidates(["images"], imageFallbacks),
-        ...buildCandidates(["other"], config.imageExts)
-      ];
-      const extras = await scanCandidates(candidates, {
-        phase: "Light background scan",
-        start: 82,
-        end: 100,
-        concurrency: 6
-      });
-      const hadNoRenderedAssets = state.shown === 0;
-      const added = addAssets(extras);
-      if (state.shown < state.assets.length) loadMore.hidden = false;
-      if (added && hadNoRenderedAssets) {
-        renderConstellation();
-        renderNextBatch();
-      }
-      updateScanProgress(100, "Scan complete");
-    }
-
-    function scheduleBackgroundScan() {
-      const start = () => scanBackgroundAssets();
-      if ("requestIdleCallback" in window) {
-        window.requestIdleCallback(start, { timeout: 6000 });
-      } else {
-        window.setTimeout(start, 2800);
-      }
-    }
-
     function createMedia(asset, eager = false) {
       if (asset.type === "video") {
         const video = document.createElement("video");
@@ -1293,6 +1175,7 @@
       image.src = asset.src;
       image.alt = `Apple Penguin work ${asset.index}`;
       image.loading = eager ? "eager" : "lazy";
+      image.fetchPriority = eager ? "high" : "low";
       image.decoding = "async";
       return image;
     }
@@ -1323,6 +1206,7 @@
     }
 
     function workCardClass(asset, index) {
+      if (!asset.measured) return "";
       if (asset.ratio > 1.55 && index % 4 !== 0) return "is-wide";
       if (asset.ratio < 0.78 && index % 5 !== 0) return "is-tall";
       return "";
@@ -1397,6 +1281,22 @@
         ? "assets detected in the current local archive"
         : "ready for the growing local archive";
       metricImages.textContent = `${Math.max(total, 100)}+`;
+    }
+
+    async function refreshAssetsFromGithub() {
+      if (!isGithubPages()) return;
+      updateScanProgress(70, "Syncing file list");
+      try {
+        const githubAssets = await fetchGithubAssets();
+        const added = addAssets(githubAssets);
+        if (added) {
+          if (state.shown === 0) renderConstellation();
+          if (state.shown < state.assets.length) loadMore.hidden = false;
+        }
+        updateScanProgress(100, "File list synced");
+      } catch (error) {
+        updateScanProgress(100, "Ready");
+      }
     }
 
     function openLightbox(index) {
@@ -1546,15 +1446,15 @@
       observeReveals();
       loadedCount.textContent = "Scanning";
       heroCount.textContent = "100+";
-      heroCountLabel.textContent = "scanning the current local archive";
-      updateScanProgress(4, "Fast scan");
-      const primaryAssets = await scanPrimaryAssets();
-      addAssets(primaryAssets);
+      heroCountLabel.textContent = "preparing the current image archive";
+      updateScanProgress(12, "Preparing");
+      addAssets(createFallbackAssets());
+      updateScanProgress(70, "Ready");
       loader.hidden = true;
       updateCounts();
       renderConstellation();
       renderNextBatch();
-      scheduleBackgroundScan();
+      refreshAssetsFromGithub();
     }
 
     init();
