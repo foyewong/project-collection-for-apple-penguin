@@ -767,6 +767,62 @@
       filter: saturate(1.09) contrast(1.02);
     }
 
+    .video-placeholder {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 100%;
+      min-height: inherit;
+      aspect-ratio: var(--ratio, 16 / 9);
+      padding: 22px;
+      overflow: hidden;
+      color: white;
+      text-align: center;
+      background:
+        radial-gradient(circle at 30% 24%, rgba(124, 92, 255, 0.42), transparent 38%),
+        radial-gradient(circle at 78% 72%, rgba(63, 214, 200, 0.32), transparent 40%),
+        linear-gradient(135deg, #1b2038, #4b3db5 54%, #0d8fa4);
+      transition: transform 420ms ease, filter 420ms ease;
+    }
+
+    .video-placeholder img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(1.04) contrast(1.02);
+    }
+
+    .video-placeholder::after {
+      position: absolute;
+      inset: 0;
+      content: "";
+      background: linear-gradient(to top, rgba(13, 18, 36, 0.66), rgba(13, 18, 36, 0.08));
+    }
+
+    .work-card:hover .video-placeholder {
+      transform: scale(1.055);
+      filter: saturate(1.08) contrast(1.02);
+    }
+
+    .video-placeholder::before {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      width: 68px;
+      height: 68px;
+      margin: 0;
+      border-radius: 50%;
+      content: "▶";
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: 0 18px 40px rgba(23, 32, 51, 0.2);
+      font-size: 20px;
+      text-indent: 4px;
+    }
+
     .work-label {
       position: absolute;
       inset: auto 10px 10px 10px;
@@ -1040,7 +1096,7 @@
         <div class="metrics-grid">
           <div class="metric"><strong id="metricImages">0</strong><span>苹果企鹅模块素材，来自 images 文件夹</span></div>
           <div class="metric"><strong id="metricOther">0</strong><span>海报与视觉实验素材，来自 other 文件夹</span></div>
-          <div class="metric"><strong>AI</strong><span>Prompt 调试、视觉筛选、内容整理与最终呈现</span></div>
+          <div class="metric"><strong id="metricVideos">0</strong><span>AI 视频作品，来自 videos 文件夹</span></div>
           <div class="metric"><strong>WebP</strong><span>压缩图片格式，提升 GitHub Pages 浏览速度</span></div>
         </div>
       </div>
@@ -1126,6 +1182,11 @@
               </ul>
               <p>创作目标：探索 AI 生成角色如何从静态视觉延展到动态表达，并进一步应用于短视频内容、社媒传播和数字 IP 展示。</p>
             </div>
+            <div class="counter"><b id="videosCount">0</b> assets</div>
+          </div>
+          <div class="gallery" id="videosGallery" aria-live="polite"></div>
+          <div class="load-more-wrap">
+            <button type="button" class="load-more" data-module-load="videos">Load more</button>
           </div>
         </section>
       </div>
@@ -1147,10 +1208,19 @@
   <script>
     const config = {
       batchSize: 16,
-      scanFolders: ["images", "other"],
+      scanFolders: ["images", "other", "videos"],
+      imageFolders: ["images", "other"],
+      videoFolders: ["videos"],
       scanExts: ["webp", "png", "jpg", "jpeg", "gif"],
       scanMaxIndex: 320,
       scanMissLimit: 24,
+      fallbackVideos: [
+        "videos/Perfume_commercial_video_production_202606232331.mp4"
+      ],
+      fallbackSources: [
+        { folder: "images", count: 143, ext: "webp" },
+        { folder: "other", count: 41, ext: "webp" }
+      ],
       githubRepo: "foyewong/project-collection-for-apple-penguin",
       githubBranch: "main",
       mediaExts: ["png", "jpg", "jpeg", "webp", "gif", "mp4", "webm", "mov"]
@@ -1161,7 +1231,8 @@
       assetKeys: new Set(),
       moduleShown: {
         images: 0,
-        other: 0
+        other: 0,
+        videos: 0
       },
       activeIndex: 0,
       observer: null
@@ -1171,15 +1242,18 @@
     const loadedCount = document.querySelector("#loadedCount");
     const moduleGalleries = {
       images: document.querySelector("#imagesGallery"),
-      other: document.querySelector("#otherGallery")
+      other: document.querySelector("#otherGallery"),
+      videos: document.querySelector("#videosGallery")
     };
     const moduleCounts = {
       images: document.querySelector("#imagesCount"),
-      other: document.querySelector("#otherCount")
+      other: document.querySelector("#otherCount"),
+      videos: document.querySelector("#videosCount")
     };
     const moduleLoadButtons = {
       images: document.querySelector('[data-module-load="images"]'),
-      other: document.querySelector('[data-module-load="other"]')
+      other: document.querySelector('[data-module-load="other"]'),
+      videos: document.querySelector('[data-module-load="videos"]')
     };
     const heroCount = document.querySelector("#heroCount");
     const heroCountLabel = document.querySelector("#heroCountLabel");
@@ -1188,6 +1262,7 @@
     const scanPercent = document.querySelector("#scanPercent");
     const metricImages = document.querySelector("#metricImages");
     const metricOther = document.querySelector("#metricOther");
+    const metricVideos = document.querySelector("#metricVideos");
     const constellation = document.querySelector("#constellation");
     const heroStage = document.querySelector("#heroStage");
     const lightbox = document.querySelector("#lightbox");
@@ -1265,10 +1340,58 @@
 
     async function scanLocalFolders() {
       const assets = [];
-      for (const [folderIndex, folder] of config.scanFolders.entries()) {
+      for (const [folderIndex, folder] of config.imageFolders.entries()) {
         assets.push(...await scanFolder(folder, folderIndex));
       }
+      assets.push(...createFallbackVideoAssets());
       return assets;
+    }
+
+    function createFallbackImageAssets() {
+      return config.fallbackSources.flatMap((source) =>
+        Array.from({ length: source.count }, (_, index) => {
+          const number = index + 1;
+          return {
+            folder: source.folder,
+            index: number,
+            name: String(number),
+            ext: source.ext,
+            type: "image",
+            src: `${source.folder}/${number}.${source.ext}`,
+            ratio: 4 / 3,
+            measured: false
+          };
+        })
+      );
+    }
+
+    function createFallbackAssets() {
+      return [
+        ...createFallbackImageAssets(),
+        ...createFallbackVideoAssets()
+      ];
+    }
+
+    function createFallbackVideoAssets() {
+      return config.fallbackVideos.map((src, index) => {
+        const parts = src.split("/");
+        const file = parts.pop() || "";
+        const folder = parts.join("/");
+        const dotIndex = file.lastIndexOf(".");
+        const name = dotIndex >= 0 ? file.slice(0, dotIndex) : file;
+        const ext = dotIndex >= 0 ? file.slice(dotIndex + 1).toLowerCase() : "mp4";
+        return {
+          folder,
+          index: index + 1,
+          name,
+          ext,
+          type: "video",
+          src,
+          poster: `${folder}/${name}.webp`,
+          ratio: 16 / 9,
+          measured: false
+        };
+      });
     }
 
     function isGithubPages() {
@@ -1276,18 +1399,31 @@
     }
 
     function pathToAsset(path) {
-      const match = path.match(/^(.+)\/(\d+)\.([a-z0-9]+)$/i);
+      const match = path.match(/^(.+)\/(.+)\.([a-z0-9]+)$/i);
       if (!match) return null;
       const ext = match[3].toLowerCase();
       if (!config.mediaExts.includes(ext)) return null;
+      const numericIndex = Number(match[2]);
+      const isNumbered = Number.isFinite(numericIndex);
       return {
         folder: match[1],
-        index: Number(match[2]),
+        index: isNumbered ? numericIndex : 999000 + Math.abs(hashText(match[2])) % 100000,
+        name: match[2],
         ext,
         type: ["mp4", "webm", "mov"].includes(ext) ? "video" : "image",
         src: path,
-        ratio: 4 / 3
+        poster: ["mp4", "webm", "mov"].includes(ext) ? `${match[1]}/${match[2]}.webp` : "",
+        ratio: ["mp4", "webm", "mov"].includes(ext) ? 16 / 9 : 4 / 3
       };
+    }
+
+    function hashText(text) {
+      let hash = 0;
+      for (let i = 0; i < text.length; i += 1) {
+        hash = ((hash << 5) - hash) + text.charCodeAt(i);
+        hash |= 0;
+      }
+      return hash;
     }
 
     async function fetchGithubAssets() {
@@ -1312,7 +1448,7 @@
     }
 
     function assetKey(asset) {
-      return `${asset.folder}/${asset.index}`;
+      return `${asset.folder}/${asset.name || asset.index}.${asset.ext}`;
     }
 
     function sortAssets() {
@@ -1347,12 +1483,30 @@
 
     function createMedia(asset, eager = false) {
       if (asset.type === "video") {
+        if (!eager) {
+          const cover = document.createElement("div");
+          cover.className = "video-placeholder";
+
+          if (asset.poster) {
+            const image = document.createElement("img");
+            image.src = asset.poster;
+            image.alt = `${assetDisplayName(asset)} cover`;
+            image.loading = "lazy";
+            image.fetchPriority = "low";
+            image.decoding = "async";
+            cover.append(image);
+          }
+
+          return cover;
+        }
+
         const video = document.createElement("video");
         video.src = asset.src;
-        video.muted = true;
-        video.loop = true;
+        if (asset.poster) video.poster = asset.poster;
+        video.muted = false;
+        video.loop = false;
         video.playsInline = true;
-        video.preload = eager ? "auto" : "metadata";
+        video.preload = "metadata";
         return video;
       }
       const image = document.createElement("img");
@@ -1362,6 +1516,10 @@
       image.fetchPriority = eager ? "high" : "low";
       image.decoding = "async";
       return image;
+    }
+
+    function assetDisplayName(asset) {
+      return `${asset.folder}/${asset.name || asset.index}.${asset.ext}`;
     }
 
     function renderConstellation() {
@@ -1405,7 +1563,7 @@
       const media = createMedia(asset);
       const label = document.createElement("div");
       label.className = "work-label";
-      label.innerHTML = `<span>${asset.folder}/${asset.index}.${asset.ext}</span><span>${asset.type}</span>`;
+      label.innerHTML = `<span>${assetDisplayName(asset)}</span><span>${asset.type}</span>`;
       card.append(media, label);
       card.addEventListener("click", () => openLightbox(index));
       card.addEventListener("pointermove", handleCardTilt);
@@ -1463,8 +1621,6 @@
           entries.forEach((entry) => {
             if (!entry.isIntersecting) return;
             entry.target.classList.add("is-visible");
-            const video = entry.target.querySelector("video");
-            if (video && !reducedMotion) video.play().catch(() => {});
             state.observer.unobserve(entry.target);
           });
         }, { threshold: 0.12, rootMargin: "90px 0px" });
@@ -1486,6 +1642,7 @@
         : "no numbered image files detected yet";
       metricImages.textContent = String(assetsForModule("images").length);
       metricOther.textContent = String(assetsForModule("other").length);
+      metricVideos.textContent = String(assetsForModule("videos").length);
     }
 
     async function refreshAssetsFromGithub() {
@@ -1506,6 +1663,18 @@
         }
         updateScanProgress(100, "File list synced");
       } catch (error) {
+        updateScanProgress(100, "Ready");
+      }
+    }
+
+    async function loadGithubPageAssets() {
+      updateScanProgress(18, "Loading file list");
+      try {
+        const githubAssets = await fetchGithubAssets();
+        addAssets(githubAssets.length ? githubAssets : createFallbackAssets());
+        updateScanProgress(100, githubAssets.length ? "File list synced" : "Ready");
+      } catch (error) {
+        addAssets(createFallbackAssets());
         updateScanProgress(100, "Ready");
       }
     }
@@ -1537,9 +1706,10 @@
         media.controls = true;
         media.muted = false;
         media.autoplay = true;
+        media.preload = "auto";
       }
       lightboxMedia.append(media);
-      lightboxTitle.innerHTML = `<b>${asset.folder}/${asset.index}.${asset.ext}</b> &middot; ${state.activeIndex + 1} / ${state.assets.length}`;
+      lightboxTitle.innerHTML = `<b>${assetDisplayName(asset)}</b> &middot; ${state.activeIndex + 1} / ${state.assets.length}`;
     }
 
     function setupPointerInteraction() {
@@ -1663,9 +1833,13 @@
       heroCount.textContent = "0";
       heroCountLabel.textContent = "scanning the current visual archive";
       updateScanProgress(12, "Preparing");
-      const localAssets = await scanLocalFolders();
-      addAssets(localAssets);
-      updateScanProgress(100, state.assets.length ? "Ready" : "No files found");
+      if (isGithubPages()) {
+        await loadGithubPageAssets();
+      } else {
+        const localAssets = await scanLocalFolders();
+        addAssets(localAssets);
+        updateScanProgress(100, state.assets.length ? "Ready" : "No files found");
+      }
       loader.hidden = true;
       updateCounts();
       renderConstellation();
