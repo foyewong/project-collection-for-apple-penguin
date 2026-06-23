@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Apple Penguin | AI Digital IP Experiment</title>
+  <title>AI Visual Archive | Apple Penguin Project Collection</title>
   <style>
     :root {
       color-scheme: light;
@@ -512,6 +512,17 @@
       line-height: 1.68;
     }
 
+    .story-list {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.68;
+    }
+
+    .story-list li + li {
+      margin-top: 4px;
+    }
+
     .sticky-preview {
       position: sticky;
       top: 92px;
@@ -669,6 +680,38 @@
     .gallery.is-large {
       grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
       gap: 18px;
+    }
+
+    .module-stack {
+      display: grid;
+      gap: 42px;
+    }
+
+    .module-panel {
+      padding-top: 8px;
+      border-top: 1px solid rgba(23, 32, 51, 0.12);
+    }
+
+    .module-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: end;
+      margin-bottom: 18px;
+    }
+
+    .module-head h3 {
+      margin: 0;
+      font-size: clamp(26px, 4vw, 44px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .module-head p {
+      max-width: 620px;
+      margin: 10px 0 0;
+      color: var(--muted);
+      line-height: 1.6;
     }
 
     .work-card {
@@ -864,6 +907,7 @@
       .section { padding: 66px 0; }
       .metrics-grid,
       .gallery-head { grid-template-columns: 1fr; }
+      .module-head { grid-template-columns: 1fr; }
       .gallery-tools { justify-content: flex-start; }
       .gallery,
       .gallery.is-large {
@@ -897,9 +941,9 @@
 
   <header class="topbar">
     <div class="wrap topbar-inner">
-      <a class="brand" href="#top" aria-label="Apple Penguin">
+      <a class="brand" href="#top" aria-label="AI Visual Archive">
         <span class="brand-mark" aria-hidden="true">&#128039;</span>
-        <span>Apple Penguin</span>
+        <span>AI Visual Archive</span>
       </a>
       <nav class="nav" aria-label="Page navigation">
         <a href="#story">Story</a>
@@ -913,9 +957,9 @@
   <main id="top">
     <section class="wrap hero">
       <div class="hero-copy reveal">
-        <div class="eyebrow">AI Digital IP Experiment</div>
-        <h1><span>Apple</span><span class="title-gradient">Penguin</span></h1>
-        <p>A generative character universe exploring AI, content, and digital storytelling through images, short videos, 3D experiments, and social media testing.</p>
+        <div class="eyebrow">AI Creative Portfolio</div>
+        <h1><span>AI 创意</span><span class="title-gradient">作品集</span></h1>
+        <p>这是一个围绕 AI 内容创作、数字 IP 和视觉实验搭建的作品集。我尝试将 AI 工具应用在角色内容、社媒视觉、海报设计和短视频创作中，把创意想法转化成可展示、可传播的视觉内容。</p>
         <div class="hero-actions">
           <a class="button-link primary" href="#gallery-section">Explore the archive</a>
           <a class="button-link" href="#story">Read the story</a>
@@ -928,7 +972,7 @@
         <div class="media-constellation" id="constellation"></div>
         <div class="hero-count">
           <strong id="heroCount">100+</strong>
-          <span id="heroCountLabel">scanning the current local archive</span>
+          <span id="heroCountLabel">scanning the current visual archive</span>
           <div class="scan-meter" aria-hidden="true">
             <div class="scan-meter-track">
               <div class="scan-meter-fill" id="scanMeterFill"></div>
@@ -945,10 +989,10 @@
     <section class="wrap section" id="story">
       <div class="section-title reveal">
         <div>
-          <p class="section-kicker">Why I built this project</p>
-          <h2>From AI tests to a scalable IP world.</h2>
+          <p class="section-kicker">AI Creative Portfolio</p>
+          <h2>从生成图片，到内容验证与视觉表达。</h2>
         </div>
-        <p>Instead of showing images as a flat folder, the page treats them like a launch story: concept, system, content, and publishing loop.</p>
+        <p>在这些项目中，我主要负责创意构思、Prompt 调试、视觉方向筛选、内容整理与最终呈现。相比单纯生成图片，我更关注 AI 如何帮助完成内容验证、角色延展、视觉风格探索和营销创意表达。</p>
       </div>
 
       <div class="story-grid">
@@ -956,29 +1000,29 @@
           <article class="story-step">
             <span class="step-number">01</span>
             <div>
-              <h3>AI + IP exploration</h3>
-              <p>Use generative tools to find a repeatable character language for Apple Penguin and test how consistent the universe can become.</p>
+              <h3>AI 内容创作</h3>
+              <p>围绕角色内容、社媒视觉、海报设计和短视频创作进行快速生成、筛选与优化。</p>
             </div>
           </article>
           <article class="story-step">
             <span class="step-number">02</span>
             <div>
-              <h3>Social media experiments</h3>
-              <p>Turn the character into scenes, narratives, and short-form formats for TikTok and Xiaohongshu publishing tests.</p>
+              <h3>数字 IP 与视觉实验</h3>
+              <p>关注 AI 如何支持角色延展、视觉风格探索、传播场景测试和营销创意表达。</p>
             </div>
           </article>
           <article class="story-step">
             <span class="step-number">03</span>
             <div>
-              <h3>Content system design</h3>
-              <p>Build a flexible archive that can keep growing as more images, videos, and 3D trials are added to the project folders.</p>
+              <h3>内容整理与最终呈现</h3>
+              <p>将生成结果整理为可浏览、可展示的作品集结构，让不同项目拥有清晰的叙事和模块边界。</p>
             </div>
           </article>
         </div>
         <div class="sticky-preview" id="storyPreview" aria-hidden="true">
-          <img src="images/1.png" alt="" loading="lazy" decoding="async" fetchpriority="low">
-          <img src="images/8.png" alt="" loading="lazy" decoding="async" fetchpriority="low">
-          <img src="images/15.png" alt="" loading="lazy" decoding="async" fetchpriority="low">
+          <img src="images/1.webp" alt="" loading="lazy" decoding="async" fetchpriority="low">
+          <img src="images/8.webp" alt="" loading="lazy" decoding="async" fetchpriority="low">
+          <img src="images/15.webp" alt="" loading="lazy" decoding="async" fetchpriority="low">
         </div>
       </div>
     </section>
@@ -987,17 +1031,17 @@
       <div class="wrap">
         <div class="section-title reveal">
           <div>
-            <p class="section-kicker">Project signals</p>
-            <h2>Built like a product launch.</h2>
+            <p class="section-kicker">Archive overview</p>
+            <h2>两个视觉模块，分别统计展示。</h2>
           </div>
-          <p>Clear numbers make the experiment feel more concrete, while the interactive archive keeps the visual work inspectable.</p>
+          <p>苹果企鹅模块对应 images 文件夹，海报与视觉实验模块对应 other 文件夹。两个部分拥有独立描述、独立图库和独立素材数量。</p>
         </div>
 
         <div class="metrics-grid">
-          <div class="metric"><strong id="metricImages">100+</strong><span>images generated, selected, and organized into a growing visual archive</span></div>
-          <div class="metric"><strong>10+</strong><span>videos planned for motion tests, storytelling cuts, and social publishing</span></div>
-          <div class="metric"><strong>3D</strong><span>experiments for richer character presence and spatial campaign scenes</span></div>
-          <div class="metric"><strong>Social</strong><span>TikTok and Xiaohongshu testing for audience feedback loops</span></div>
+          <div class="metric"><strong id="metricImages">0</strong><span>苹果企鹅模块素材，来自 images 文件夹</span></div>
+          <div class="metric"><strong id="metricOther">0</strong><span>海报与视觉实验素材，来自 other 文件夹</span></div>
+          <div class="metric"><strong>AI</strong><span>Prompt 调试、视觉筛选、内容整理与最终呈现</span></div>
+          <div class="metric"><strong>WebP</strong><span>压缩图片格式，提升 GitHub Pages 浏览速度</span></div>
         </div>
       </div>
     </section>
@@ -1005,11 +1049,11 @@
     <section class="wrap section" id="gallery-section">
       <div class="gallery-head reveal">
         <div>
-          <p class="section-kicker">Full gallery</p>
-          <h2>Every frame stays interactive.</h2>
+          <p class="section-kicker">Project modules</p>
+          <h2>两个项目章节，两个视觉方向。</h2>
         </div>
         <div class="gallery-tools">
-          <div class="counter"><b id="loadedCount">Scanning</b> local assets</div>
+          <div class="counter"><b id="loadedCount">Scanning</b> total assets</div>
           <div class="toggle" aria-label="Switch gallery size">
             <button type="button" class="is-active" data-view="dense">Dense</button>
             <button type="button" data-view="large">Large</button>
@@ -1018,9 +1062,72 @@
       </div>
 
       <div class="loader" id="loader">Scanning local media...</div>
-      <div class="gallery" id="gallery" aria-live="polite"></div>
-      <div class="load-more-wrap">
-        <button type="button" class="load-more" id="loadMore">Load more</button>
+      <div class="module-stack" id="moduleStack">
+        <section class="module-panel" id="images-module">
+          <div class="module-head">
+            <div>
+              <p class="section-kicker">01 苹果企鹅 · images</p>
+              <h3>Apple Penguin｜AI Digital IP Experiment</h3>
+              <p>苹果企鹅是我基于 AI 工具搭建的一个数字 IP 实验项目。我围绕“苹果企鹅”这一拟人化角色，持续产出表情包、场景图、剧情化图片、短视频和 3D 模型，尝试探索一个虚拟角色如何通过 AI 进行低成本、高频率的内容生产。</p>
+              <p>这个项目最初来源于个人兴趣，后来逐渐发展成一个较完整的角色内容体系。通过不同场景、情绪、动作和热点内容的延展，我尝试保持角色识别度，同时测试它在小红书、TikTok 等社媒平台上的传播可能性。</p>
+              <ul class="story-list">
+                <li>产出 100+ 张 AI 图片，制作 10+ 条 AI 视频</li>
+                <li>尝试生成多个 3D 角色模型</li>
+                <li>内容涵盖表情包、剧情场景、K-Pop 动作模仿视频和社媒内容</li>
+                <li>发布至小红书、TikTok 进行内容测试</li>
+              </ul>
+              <p>创作方向：可爱、搞怪、情绪化、角色驱动。这个项目不仅是图片生成实验，更是一次关于 AI 数字角色、社媒内容和 IP 延展能力的探索。</p>
+            </div>
+            <div class="counter"><b id="imagesCount">0</b> assets</div>
+          </div>
+          <div class="gallery" id="imagesGallery" aria-live="polite"></div>
+          <div class="load-more-wrap">
+            <button type="button" class="load-more" data-module-load="images">Load more</button>
+          </div>
+        </section>
+
+        <section class="module-panel" id="other-module">
+          <div class="module-head">
+            <div>
+              <p class="section-kicker">02 海报与视觉实验 · other</p>
+              <h3>Posters & Visual Experiments</h3>
+              <p>除了苹果企鹅项目外，我也尝试使用 AI 工具制作不同风格的视觉海报和社媒内容，包括潮玩风格、盲盒手办风格、宠物主题海报、K-Pop 应援图和 IP 视觉宣传图。</p>
+              <p>这些作品更偏向视觉概念验证。我会根据主题、角色、用户兴趣或传播场景，先思考整体氛围、构图方向和视觉元素，再通过 AI 快速生成不同方案，筛选出更适合用于海报、社媒或营销物料的视觉方向。</p>
+              <ul class="story-list">
+                <li>潮玩 / 盲盒手办风格海报</li>
+                <li>K-Pop 应援图</li>
+                <li>宠物主题视觉海报</li>
+                <li>IP 角色宣传图</li>
+                <li>社媒视觉内容实验</li>
+              </ul>
+              <p>创作重点：视觉叙事、版式方向、氛围塑造和创意验证。这一部分主要展示我如何使用 AI 快速测试视觉想法，并将抽象创意转化为具体可参考的视觉方案。</p>
+            </div>
+            <div class="counter"><b id="otherCount">0</b> assets</div>
+          </div>
+          <div class="gallery" id="otherGallery" aria-live="polite"></div>
+          <div class="load-more-wrap">
+            <button type="button" class="load-more" data-module-load="other">Load more</button>
+          </div>
+        </section>
+
+        <section class="module-panel" id="video-module">
+          <div class="module-head">
+            <div>
+              <p class="section-kicker">03 AI 视频作品</p>
+              <h3>AI Video Works</h3>
+              <p>视频部分主要展示我使用 AI 视频工具完成的短视频实验，包括角色动作模仿、K-Pop 舞蹈片段、剧情化短视频和社媒风格内容。</p>
+              <p>在这些视频中，我更关注 AI 角色从静态图片到动态内容的延展能力。通过动作参考、角色形象、镜头氛围和视频节奏的组合，我尝试让虚拟角色拥有更强的表现力和传播感。</p>
+              <ul class="story-list">
+                <li>K-Pop 动作模仿视频</li>
+                <li>角色表演视频</li>
+                <li>剧情化短视频</li>
+                <li>社媒风格视频实验</li>
+                <li>AI 角色动画测试</li>
+              </ul>
+              <p>创作目标：探索 AI 生成角色如何从静态视觉延展到动态表达，并进一步应用于短视频内容、社媒传播和数字 IP 展示。</p>
+            </div>
+          </div>
+        </section>
       </div>
     </section>
   </main>
@@ -1039,10 +1146,11 @@
 
   <script>
     const config = {
-      fallbackImageCount: 107,
       batchSize: 16,
-      fallbackFolder: "images",
-      fallbackExt: "png",
+      scanFolders: ["images", "other"],
+      scanExts: ["webp", "png", "jpg", "jpeg", "gif"],
+      scanMaxIndex: 320,
+      scanMissLimit: 24,
       githubRepo: "foyewong/project-collection-for-apple-penguin",
       githubBranch: "main",
       mediaExts: ["png", "jpg", "jpeg", "webp", "gif", "mp4", "webm", "mov"]
@@ -1051,21 +1159,35 @@
     const state = {
       assets: [],
       assetKeys: new Set(),
-      shown: 0,
+      moduleShown: {
+        images: 0,
+        other: 0
+      },
       activeIndex: 0,
       observer: null
     };
 
-    const gallery = document.querySelector("#gallery");
     const loader = document.querySelector("#loader");
-    const loadMore = document.querySelector("#loadMore");
     const loadedCount = document.querySelector("#loadedCount");
+    const moduleGalleries = {
+      images: document.querySelector("#imagesGallery"),
+      other: document.querySelector("#otherGallery")
+    };
+    const moduleCounts = {
+      images: document.querySelector("#imagesCount"),
+      other: document.querySelector("#otherCount")
+    };
+    const moduleLoadButtons = {
+      images: document.querySelector('[data-module-load="images"]'),
+      other: document.querySelector('[data-module-load="other"]')
+    };
     const heroCount = document.querySelector("#heroCount");
     const heroCountLabel = document.querySelector("#heroCountLabel");
     const scanMeterFill = document.querySelector("#scanMeterFill");
     const scanPhase = document.querySelector("#scanPhase");
     const scanPercent = document.querySelector("#scanPercent");
     const metricImages = document.querySelector("#metricImages");
+    const metricOther = document.querySelector("#metricOther");
     const constellation = document.querySelector("#constellation");
     const heroStage = document.querySelector("#heroStage");
     const lightbox = document.querySelector("#lightbox");
@@ -1073,18 +1195,80 @@
     const lightboxTitle = document.querySelector("#lightboxTitle");
     const storyPreview = document.querySelector("#storyPreview");
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    function createFallbackAssets() {
-      return Array.from({ length: config.fallbackImageCount }, (_, index) => {
-        const number = index + 1;
-        return {
-          folder: config.fallbackFolder,
-          index: number,
-          ext: config.fallbackExt,
-          type: "image",
-          src: `${config.fallbackFolder}/${number}.${config.fallbackExt}`,
-          ratio: 4 / 3
+
+    function probeImage(src) {
+      return new Promise((resolve) => {
+        const image = new Image();
+        let settled = false;
+        const timeout = window.setTimeout(() => finish(null), 1800);
+
+        function finish(result) {
+          if (settled) return;
+          settled = true;
+          window.clearTimeout(timeout);
+          image.onload = null;
+          image.onerror = null;
+          resolve(result);
+        }
+
+        image.onload = () => {
+          finish({
+            ratio: image.naturalWidth && image.naturalHeight
+              ? image.naturalWidth / image.naturalHeight
+              : 4 / 3
+          });
         };
+        image.onerror = () => finish(null);
+        image.src = src;
       });
+    }
+
+    async function findNumberedAsset(folder, index) {
+      for (const ext of config.scanExts) {
+        const src = `${folder}/${index}.${ext}`;
+        const imageData = await probeImage(src);
+        if (imageData) {
+          return {
+            folder,
+            index,
+            ext,
+            type: "image",
+            src,
+            ratio: imageData.ratio,
+            measured: true
+          };
+        }
+      }
+      return null;
+    }
+
+    async function scanFolder(folder, folderIndex) {
+      const assets = [];
+      let misses = 0;
+
+      for (let index = 1; index <= config.scanMaxIndex && misses < config.scanMissLimit; index += 1) {
+        const asset = await findNumberedAsset(folder, index);
+        if (asset) {
+          assets.push(asset);
+          misses = 0;
+          updateScanProgress(
+            16 + ((folderIndex + Math.min(index, config.scanMaxIndex) / config.scanMaxIndex) / config.scanFolders.length) * 68,
+            `Scanning ${folder}`
+          );
+        } else {
+          misses += 1;
+        }
+      }
+
+      return assets;
+    }
+
+    async function scanLocalFolders() {
+      const assets = [];
+      for (const [folderIndex, folder] of config.scanFolders.entries()) {
+        assets.push(...await scanFolder(folder, folderIndex));
+      }
+      return assets;
     }
 
     function isGithubPages() {
@@ -1212,7 +1396,8 @@
       return "";
     }
 
-    function createWorkCard(asset, index) {
+    function createWorkCard(asset) {
+      const index = state.assets.findIndex((item) => assetKey(item) === assetKey(asset));
       const card = document.createElement("article");
       card.className = `work-card ${workCardClass(asset, index)}`;
       card.style.setProperty("--ratio", `${Math.max(asset.ratio, 0.62)} / 1`);
@@ -1241,16 +1426,30 @@
       event.currentTarget.style.setProperty("--tilt-y", "0");
     }
 
-    function renderNextBatch() {
-      const end = Math.min(state.shown + config.batchSize, state.assets.length);
+    function assetsForModule(folder) {
+      return state.assets.filter((asset) => asset.folder === folder);
+    }
+
+    function renderModuleBatch(folder) {
+      const assets = assetsForModule(folder);
+      const gallery = moduleGalleries[folder];
+      const button = moduleLoadButtons[folder];
+      if (!gallery || !button) return;
+
+      const shown = state.moduleShown[folder] || 0;
+      const end = Math.min(shown + config.batchSize, assets.length);
       const fragment = document.createDocumentFragment();
-      for (let i = state.shown; i < end; i += 1) {
-        fragment.append(createWorkCard(state.assets[i], i));
+      for (let i = shown; i < end; i += 1) {
+        fragment.append(createWorkCard(assets[i]));
       }
       gallery.append(fragment);
-      state.shown = end;
+      state.moduleShown[folder] = end;
       observeReveals();
-      loadMore.hidden = state.shown >= state.assets.length;
+      button.hidden = end >= assets.length;
+    }
+
+    function renderAllModuleBatches() {
+      config.scanFolders.forEach((folder) => renderModuleBatch(folder));
     }
 
     function observeReveals() {
@@ -1276,11 +1475,17 @@
     function updateCounts() {
       const total = state.assets.length;
       loadedCount.textContent = total ? String(total) : "No";
-      heroCount.textContent = total ? String(total) : "100+";
+      config.scanFolders.forEach((folder) => {
+        if (moduleCounts[folder]) {
+          moduleCounts[folder].textContent = String(assetsForModule(folder).length);
+        }
+      });
+      heroCount.textContent = total ? String(total) : "0";
       heroCountLabel.textContent = total
-        ? "assets detected in the current local archive"
-        : "ready for the growing local archive";
-      metricImages.textContent = `${Math.max(total, 100)}+`;
+        ? "assets detected from images and other"
+        : "no numbered image files detected yet";
+      metricImages.textContent = String(assetsForModule("images").length);
+      metricOther.textContent = String(assetsForModule("other").length);
     }
 
     async function refreshAssetsFromGithub() {
@@ -1290,8 +1495,14 @@
         const githubAssets = await fetchGithubAssets();
         const added = addAssets(githubAssets);
         if (added) {
-          if (state.shown === 0) renderConstellation();
-          if (state.shown < state.assets.length) loadMore.hidden = false;
+          const renderedCount = Object.values(state.moduleShown).reduce((sum, count) => sum + count, 0);
+          if (renderedCount === 0) renderConstellation();
+          config.scanFolders.forEach((folder) => {
+            const assets = assetsForModule(folder);
+            if (moduleLoadButtons[folder]) {
+              moduleLoadButtons[folder].hidden = (state.moduleShown[folder] || 0) >= assets.length;
+            }
+          });
         }
         updateScanProgress(100, "File list synced");
       } catch (error) {
@@ -1422,11 +1633,15 @@
     document.querySelectorAll("[data-view]").forEach((button) => {
       button.addEventListener("click", () => {
         document.querySelectorAll("[data-view]").forEach((item) => item.classList.toggle("is-active", item === button));
-        gallery.classList.toggle("is-large", button.dataset.view === "large");
+        Object.values(moduleGalleries).forEach((gallery) => {
+          if (gallery) gallery.classList.toggle("is-large", button.dataset.view === "large");
+        });
       });
     });
 
-    loadMore.addEventListener("click", renderNextBatch);
+    document.querySelectorAll("[data-module-load]").forEach((button) => {
+      button.addEventListener("click", () => renderModuleBatch(button.dataset.moduleLoad));
+    });
     document.querySelector("#closeBtn").addEventListener("click", closeLightbox);
     document.querySelector("#prevBtn").addEventListener("click", () => moveLightbox(-1));
     document.querySelector("#nextBtn").addEventListener("click", () => moveLightbox(1));
@@ -1445,16 +1660,17 @@
       setupScrollInteraction();
       observeReveals();
       loadedCount.textContent = "Scanning";
-      heroCount.textContent = "100+";
-      heroCountLabel.textContent = "preparing the current image archive";
+      heroCount.textContent = "0";
+      heroCountLabel.textContent = "scanning the current visual archive";
       updateScanProgress(12, "Preparing");
-      addAssets(createFallbackAssets());
-      updateScanProgress(70, "Ready");
+      const localAssets = await scanLocalFolders();
+      addAssets(localAssets);
+      updateScanProgress(100, state.assets.length ? "Ready" : "No files found");
       loader.hidden = true;
       updateCounts();
       renderConstellation();
-      renderNextBatch();
-      refreshAssetsFromGithub();
+      renderAllModuleBatches();
+      if (!state.assets.length) refreshAssetsFromGithub();
     }
 
     init();
