@@ -830,6 +830,10 @@
       color: var(--muted);
     }
 
+    .loader[hidden] {
+      display: none;
+    }
+
     .load-more-wrap {
       display: flex;
       justify-content: center;
@@ -999,6 +1003,7 @@
         <a href="#story">Story</a>
         <a href="#metrics">Metrics</a>
         <a href="#gallery-section">Gallery</a>
+        <a href="#workflow">Workflow</a>
       </nav>
       <div class="status-pill"><span class="status-dot"></span><span>AI Digital IP Experiment</span></div>
     </div>
@@ -1009,7 +1014,7 @@
       <div class="hero-copy reveal">
         <div class="eyebrow">AI Creative Portfolio</div>
         <h1><span>AI 创意</span><span class="title-gradient">作品集</span></h1>
-        <p>这是一个围绕 AI 内容创作、数字 IP 和视觉实验搭建的作品集。我尝试将 AI 工具应用在角色内容、社媒视觉、海报设计和短视频创作中，把创意想法转化成可展示、可传播的视觉内容。</p>
+        <p>这是一个围绕 AI 内容创作、数字 IP 与视觉实验搭建的作品集。我尝试将 AI 工具应用在角色内容、社媒视觉、海报设计和短视频创作中，通过创意构思、Prompt 调试、视觉筛选和内容整理，把想法转化成可展示、可传播的视觉内容。</p>
         <div class="hero-actions">
           <a class="button-link primary" href="#gallery-section">Explore the archive</a>
           <a class="button-link" href="#story">Read the story</a>
@@ -1040,9 +1045,9 @@
       <div class="section-title reveal">
         <div>
           <p class="section-kicker">AI Creative Portfolio</p>
-          <h2>从生成图片，到内容验证与视觉表达。</h2>
+          <h2>从 AI 内容创作，到数字 IP 与视觉实验。</h2>
         </div>
-        <p>在这些项目中，我主要负责创意构思、Prompt 调试、视觉方向筛选、内容整理与最终呈现。相比单纯生成图片，我更关注 AI 如何帮助完成内容验证、角色延展、视觉风格探索和营销创意表达。</p>
+        <p>相比单纯生成图片，我更关注 AI 如何帮助完成内容验证、角色延展、视觉风格探索和营销创意表达。这些作品既包含个人兴趣驱动的 AI IP 实验，也包含面向社媒传播和视觉参考的内容创作尝试。</p>
       </div>
 
       <div class="story-grid">
@@ -1050,22 +1055,22 @@
           <article class="story-step">
             <span class="step-number">01</span>
             <div>
-              <h3>AI 内容创作</h3>
-              <p>围绕角色内容、社媒视觉、海报设计和短视频创作进行快速生成、筛选与优化。</p>
+              <h3>创意构思与 Prompt 调试</h3>
+              <p>根据角色设定、主题方向和传播场景拆解创作需求，把抽象想法转化为可生成、可迭代的视觉描述。</p>
             </div>
           </article>
           <article class="story-step">
             <span class="step-number">02</span>
             <div>
-              <h3>数字 IP 与视觉实验</h3>
-              <p>关注 AI 如何支持角色延展、视觉风格探索、传播场景测试和营销创意表达。</p>
+              <h3>视觉筛选与内容整理</h3>
+              <p>从大量生成结果中筛选符合角色识别度、视觉效果和展示场景的内容，并进行分类、压缩和归档。</p>
             </div>
           </article>
           <article class="story-step">
             <span class="step-number">03</span>
             <div>
-              <h3>内容整理与最终呈现</h3>
-              <p>将生成结果整理为可浏览、可展示的作品集结构，让不同项目拥有清晰的叙事和模块边界。</p>
+              <h3>可展示、可传播的视觉内容</h3>
+              <p>将图片、视频和视觉实验组织成清晰的作品集结构，用于展示 AI 在数字 IP、社媒内容和营销创意中的应用可能。</p>
             </div>
           </article>
         </div>
@@ -1082,16 +1087,16 @@
         <div class="section-title reveal">
           <div>
             <p class="section-kicker">Archive overview</p>
-            <h2>两个视觉模块，分别统计展示。</h2>
+            <h2>三个内容模块，分别统计展示。</h2>
           </div>
-          <p>苹果企鹅模块对应 images 文件夹，海报与视觉实验模块对应 other 文件夹。两个部分拥有独立描述、独立图库和独立素材数量。</p>
+          <p>作品集分为苹果企鹅、海报与视觉实验、AI 视频作品三个部分。图片素材来自 images 与 other 文件夹，视频作品来自 videos 文件夹，后续新增素材后会自动进入对应模块。</p>
         </div>
 
         <div class="metrics-grid">
-          <div class="metric"><strong id="metricImages">0</strong><span>苹果企鹅模块素材，来自 images 文件夹</span></div>
+          <div class="metric"><strong id="metricImages">0</strong><span>苹果企鹅 AI 图片素材，来自 images 文件夹</span></div>
           <div class="metric"><strong id="metricOther">0</strong><span>海报与视觉实验素材，来自 other 文件夹</span></div>
           <div class="metric"><strong id="metricVideos">0</strong><span>AI 视频作品，来自 videos 文件夹</span></div>
-          <div class="metric"><strong>WebP</strong><span>压缩图片格式，提升 GitHub Pages 浏览速度</span></div>
+          <div class="metric"><strong>AI</strong><span>覆盖数字 IP、社媒视觉、海报设计与短视频实验</span></div>
         </div>
       </div>
     </section>
@@ -1100,7 +1105,7 @@
       <div class="gallery-head reveal">
         <div>
           <p class="section-kicker">Project modules</p>
-          <h2>两个项目章节，两个视觉方向。</h2>
+          <h2>作品模块与视觉归档。</h2>
         </div>
         <div class="gallery-tools">
           <div class="counter"><b id="loadedCount">Scanning</b> total assets</div>
@@ -1118,15 +1123,18 @@
             <div>
               <p class="section-kicker">01 苹果企鹅 · images</p>
               <h3>Apple Penguin｜AI Digital IP Experiment</h3>
-              <p>苹果企鹅是我基于 AI 工具搭建的一个数字 IP 实验项目。我围绕“苹果企鹅”这一拟人化角色，持续产出表情包、场景图、剧情化图片、短视频和 3D 模型，尝试探索一个虚拟角色如何通过 AI 进行低成本、高频率的内容生产。</p>
-              <p>这个项目最初来源于个人兴趣，后来逐渐发展成一个较完整的角色内容体系。通过不同场景、情绪、动作和热点内容的延展，我尝试保持角色识别度，同时测试它在小红书、TikTok 等社媒平台上的传播可能性。</p>
+              <p>苹果企鹅是我基于 AI 工具搭建的数字 IP 实验项目。我围绕“苹果企鹅”这一拟人化角色，持续产出表情包、场景图、剧情化图片、短视频和 3D 模型，尝试探索一个虚拟角色如何通过 AI 进行低成本、高频率的内容生产。</p>
+              <p>这个项目最初来源于个人兴趣，后来逐渐发展成较完整的角色内容体系。通过不同场景、情绪、动作和热点内容的延展，我尝试保持角色识别度，同时测试它在小红书、TikTok 等社媒平台上的传播可能性。</p>
+              <p><strong>项目亮点｜Project Highlights</strong></p>
               <ul class="story-list">
-                <li>产出 100+ 张 AI 图片，制作 10+ 条 AI 视频</li>
+                <li>产出 100+ 张 AI 图片</li>
+                <li>制作 10+ 条 AI 视频</li>
                 <li>尝试生成多个 3D 角色模型</li>
                 <li>内容涵盖表情包、剧情场景、K-Pop 动作模仿视频和社媒内容</li>
                 <li>发布至小红书、TikTok 进行内容测试</li>
               </ul>
-              <p>创作方向：可爱、搞怪、情绪化、角色驱动。这个项目不仅是图片生成实验，更是一次关于 AI 数字角色、社媒内容和 IP 延展能力的探索。</p>
+              <p><strong>创作方向｜Creative Direction</strong></p>
+              <p>可爱、搞怪、情绪化、角色驱动。这个项目不仅是图片生成实验，更是一次关于 AI 数字角色、社媒内容和 IP 延展能力的探索。</p>
             </div>
             <div class="counter"><b id="imagesCount">0</b> assets</div>
           </div>
@@ -1141,8 +1149,9 @@
             <div>
               <p class="section-kicker">02 海报与视觉实验 · other</p>
               <h3>Posters & Visual Experiments</h3>
-              <p>除了苹果企鹅项目外，我也尝试使用 AI 工具制作不同风格的视觉海报和社媒内容，包括潮玩风格、盲盒手办风格、宠物主题海报、K-Pop 应援图和 IP 视觉宣传图。</p>
+              <p>这一部分主要展示我使用 AI 工具制作的视觉海报和社媒内容，包括潮玩风格、盲盒手办风格、宠物主题海报、K-Pop 应援图和 IP 视觉宣传图。</p>
               <p>这些作品更偏向视觉概念验证。我会根据主题、角色、用户兴趣或传播场景，先思考整体氛围、构图方向和视觉元素，再通过 AI 快速生成不同方案，筛选出更适合用于海报、社媒或营销物料的视觉方向。</p>
+              <p><strong>作品类型｜Included Works</strong></p>
               <ul class="story-list">
                 <li>潮玩 / 盲盒手办风格海报</li>
                 <li>K-Pop 应援图</li>
@@ -1150,7 +1159,8 @@
                 <li>IP 角色宣传图</li>
                 <li>社媒视觉内容实验</li>
               </ul>
-              <p>创作重点：视觉叙事、版式方向、氛围塑造和创意验证。这一部分主要展示我如何使用 AI 快速测试视觉想法，并将抽象创意转化为具体可参考的视觉方案。</p>
+              <p><strong>创作重点｜Creative Focus</strong></p>
+              <p>视觉叙事、版式方向、氛围塑造和创意验证。这一部分主要展示我如何使用 AI 快速测试视觉想法，并将抽象创意转化为具体可参考的视觉方案。</p>
             </div>
             <div class="counter"><b id="otherCount">0</b> assets</div>
           </div>
@@ -1163,10 +1173,11 @@
         <section class="module-panel" id="video-module">
           <div class="module-head">
             <div>
-              <p class="section-kicker">03 AI 视频作品</p>
+              <p class="section-kicker">03 AI 视频作品 · videos</p>
               <h3>AI Video Works</h3>
               <p>视频部分主要展示我使用 AI 视频工具完成的短视频实验，包括角色动作模仿、K-Pop 舞蹈片段、剧情化短视频和社媒风格内容。</p>
               <p>在这些视频中，我更关注 AI 角色从静态图片到动态内容的延展能力。通过动作参考、角色形象、镜头氛围和视频节奏的组合，我尝试让虚拟角色拥有更强的表现力和传播感。</p>
+              <p><strong>视频类型｜Video Types</strong></p>
               <ul class="story-list">
                 <li>K-Pop 动作模仿视频</li>
                 <li>角色表演视频</li>
@@ -1174,7 +1185,8 @@
                 <li>社媒风格视频实验</li>
                 <li>AI 角色动画测试</li>
               </ul>
-              <p>创作目标：探索 AI 生成角色如何从静态视觉延展到动态表达，并进一步应用于短视频内容、社媒传播和数字 IP 展示。</p>
+              <p><strong>创作目标｜Creative Goal</strong></p>
+              <p>探索 AI 生成角色如何从静态视觉延展到动态表达，并进一步应用于短视频内容、社媒传播和数字 IP 展示。</p>
             </div>
             <div class="counter"><b id="videosCount">0</b> assets</div>
           </div>
@@ -1183,6 +1195,61 @@
             <button type="button" class="load-more" data-module-load="videos">Load more</button>
           </div>
         </section>
+      </div>
+    </section>
+
+    <section class="wrap section" id="workflow">
+      <div class="section-title reveal">
+        <div>
+          <p class="section-kicker">Creative Workflow</p>
+          <h2>创作流程。</h2>
+        </div>
+        <p>我的 AI 创作流程通常从方向设定开始，经过提示词设计、内容生成、筛选优化和整理呈现，最后将部分内容发布至社媒平台进行测试。</p>
+      </div>
+
+      <div class="story-steps">
+        <article class="story-step">
+          <span class="step-number">01</span>
+          <div>
+            <h3>Idea｜创意构思</h3>
+            <p>根据角色设定、热点内容、节日主题或视觉参考确定创作方向。</p>
+          </div>
+        </article>
+        <article class="story-step">
+          <span class="step-number">02</span>
+          <div>
+            <h3>Prompt｜提示词设计</h3>
+            <p>将抽象想法拆解成角色、场景、情绪、动作、构图、风格等具体描述。</p>
+          </div>
+        </article>
+        <article class="story-step">
+          <span class="step-number">03</span>
+          <div>
+            <h3>Generate｜内容生成</h3>
+            <p>使用不同 AI 工具生成图片、视频或视觉参考，并根据结果不断调整方向。</p>
+          </div>
+        </article>
+        <article class="story-step">
+          <span class="step-number">04</span>
+          <div>
+            <h3>Select｜筛选优化</h3>
+            <p>从生成结果中筛选符合角色识别度、视觉效果和传播场景的内容。</p>
+          </div>
+        </article>
+        <article class="story-step">
+          <span class="step-number">05</span>
+          <div>
+            <h3>Refine｜整理呈现</h3>
+            <p>对作品进行二次筛选、排版、压缩和归类，形成适合展示或发布的内容。</p>
+          </div>
+        </article>
+        <article class="story-step">
+          <span class="step-number">06</span>
+          <div>
+            <h3>Publish｜内容测试</h3>
+            <p>将部分内容发布至社媒平台，观察播放、点赞和互动反馈。</p>
+          </div>
+        </article>
       </div>
     </section>
   </main>
